@@ -1,0 +1,30 @@
+:root {
+  /* Light mode */
+  --background: #f5f5f5;
+  --card-bg: #ffffff;
+  --text-color: #333333;
+  --text-light: #ffffff;
+  --border-color: #ddd;
+  --shadow-color: rgba(0,0,0,0.1);
+  --primary: #007bff;
+}
+
+[data-theme="dark"] {
+  /* Dark mode */
+  --background: #1a1a1a;
+  --card-bg: #2d2d2d;
+  --text-color: #ffffff;
+  --text-light: #ffffff;
+  --border-color: #444;
+  --shadow-color: rgba(255,255,255,0.1);
+  --primary: #007bff;
+}
+
+/* Add these styles to ensure proper text color in dark mode */
+:root {
+  color: var(--text-color);
+}
+
+[data-theme="dark"] {
+  color: var(--text-color);
+}
