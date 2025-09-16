@@ -4,6 +4,7 @@ import D3BarChart from "../components/charts/D3BarChart";
 import LimeSurvey from "./LimeSurvey/LimeSurvey";
 import { useLocation } from "react-router-dom";
 import oecd from "../assets/oecd.jpg";
+import TalisData from "./TalisData/TalisData";
 
 const Home = () => {
   const location = useLocation();
@@ -56,6 +57,10 @@ const Home = () => {
         <div className="grid grid-cols-1 gap-8 mb-8">
           <D3BarChart data={chartData} referenceAge={29} />
           {/* <RechartsBarChart data={chartData} referenceAge={29} /> */}
+        </div>
+
+        <div>
+          <TalisData />
         </div>
 
         {/* LimeSurvey Section */}

@@ -102,8 +102,8 @@ const LimeSurvey = () => {
   }
 
   //   console.log(sessionKey, "sessionKey");
-  console.log("Survey Response:", surveyResponse);
-  console.log("Survey Questions:", surveyQuestions);
+  // console.log("Survey Response:", surveyResponse);
+  // console.log("Survey Questions:", surveyQuestions);
 
   return (
     <div>
