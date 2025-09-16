@@ -1,10 +1,40 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
+// Define the structure based on the actual API response
 export interface OECDRawData {
-  // Define the structure based on the actual API response
-  // This is a placeholder - adjust according to the actual API response structure
-  [key: string]: any;
+  meta: {
+    schema: string;
+    id: string;
+    prepared: string;
+    test: boolean;
+    contentLanguages: string[];
+    sender: {
+      id: string;
+      name: string;
+      names: {
+        [key: string]: string;
+      };
+    };
+  };
+  data: {
+    dataSets: Array<{
+      structure: string;
+      action: string;
+      links: Array<{
+        urn: string;
+        rel: string;
+      }>;
+      annotations: number[];
+      dimensionGroupAttributes: {
+        [key: string]: number[];
+      };
+      observations: {
+        [key: string]: (number | null)[];
+      };
+    }>;
+    // Add other properties from the actual response as needed
+  };
 }
 
 interface TalisDataState {
@@ -27,15 +57,8 @@ export const fetchOecdData = createAsyncThunk<OECDRawData, void, { rejectValue: 
   async (_, { rejectWithValue }) => {
     try {
       const response = await axios.get<OECDRawData>(
-        `https://sdmx.oecd.org/public/rest/data/OECD.EDU.IMEP,DSD_EAG_UOE_NON_FIN_PERS@DF_UOE_NF_PERS_CLS,1.0/.......A......_T.`,
-        {
-          params: {
-            startPeriod: 2023,
-            endPeriod: 2023,
-            dimensionAtObservation: 'AllDimensions',
-            format: 'jsondata',
-          },
-        }
+        `https://sdmx.oecd.org/public/rest/data/OECD.EDU.IMEP,DSD_EAG_UOE_NON_FIN_PERS@DF_UOE_NF_PERS_CLS,1.0/.......A......_T.?startPeriod=2022&endPeriod=2023&dimensionAtObservation=AllDimensions&format=jsondata`,
+        
       );
       
       return response.data;

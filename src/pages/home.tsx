@@ -31,14 +31,6 @@ const Home = () => {
     }
   }, [sid]);
 
-  // Sample data for the charts
-  const chartData = [
-    { age: 20, salary: 30000 },
-    { age: 25, salary: 40000 },
-    { age: 30, salary: 50000 },
-    { age: 35, salary: 60000 },
-    { age: 40, salary: 70000 },
-  ];
 
   return (
     <div className="min-h-screen w-full bg-gray-100 dark:bg-gray-900">
@@ -52,16 +44,19 @@ const Home = () => {
           />
         </div>
       </header>
+
+      <div>
+          <TalisData />
+        </div>
+
       <div className="container mx-auto px-4 py-8 max-w-6xl dark:text-white">
         {/* Charts Section */}
         <div className="grid grid-cols-1 gap-8 mb-8">
-          <D3BarChart data={chartData} referenceAge={29} />
+          {/* <D3BarChart data={chartData} referenceAge={29} /> */}
           {/* <RechartsBarChart data={chartData} referenceAge={29} /> */}
         </div>
 
-        <div>
-          <TalisData />
-        </div>
+       
 
         {/* LimeSurvey Section */}
         <div>
