@@ -20,13 +20,12 @@ const LimeSurvey = () => {
     responsesError,
     questionsError,
   } = useAppSelector((state) => state.limeSurvey);
+
   const proxyUrl = "https://cors-anywhere.herokuapp.com/";
   const targetUrl = "https://survey.oecd.org/index.php?r=admin/remotecontrol";
   const username = import.meta.env.VITE_LIMESURVEY_USER;
   const remoteToken = import.meta.env.VITE_LIMESURVEY_TOKEN;
   const surveyId = "495561";
-  // const country = "India"
-  //   const rid = 18
   const rid = localStorage.getItem("rid");
 
   const handleFetchSessionKey = async () => {
@@ -46,11 +45,6 @@ const LimeSurvey = () => {
 
   useEffect(() => {
     handleFetchSessionKey();
-
-    // Cleanup function to clear session key when component unmounts
-    // return () => {
-    //   dispatch(clearSessionKey());
-    // };
   }, []);
 
   const handleFetchSurveyResponses = () => {
@@ -87,12 +81,10 @@ const LimeSurvey = () => {
     }
   }, [sessionKey, rid]);
 
-  // Show loading state when session, responses or questions are being fetched
   if (isSessionLoading || isLoadingResponses || isLoadingQuestions) {
     return <div>Loading...</div>;
   }
 
-  // Show error if session key, responses or questions couldn't be fetched
   if (sessionError || responsesError || questionsError) {
     return (
       <div className="text-red-500">
@@ -101,34 +93,35 @@ const LimeSurvey = () => {
     );
   }
 
-  //   console.log(sessionKey, "sessionKey");
-  // console.log("Survey Response:", surveyResponse);
-  // console.log("Survey Questions:", surveyQuestions);
-
   return (
-    <div>
+    <div className="text-left">
       <div className="py-4">
-        <h1>
-          <b>Your Submitted Responses</b>
-        </h1>
+        <h1 className="text-xl font-bold">Your Submitted Responses</h1>
       </div>
-      {surveyQuestions?.map((q: Question, index: number) => {
-        const answer = surveyResponse ? surveyResponse[q.title] : null;
 
-        return (
-          <div key={q.id}>
-            <div className="p-3 border rounded-lg shadow-sm mb-2 bg-white transition-transform duration-200 hover:shadow-lg hover:-translate-y-1 hover:border-grey-400">
-              <p className="font-semibold">
-                Question {index + 1}: {q.question}
+      {/* Wrapping container */}
+      <div className="flex flex-wrap gap-4">
+        {surveyQuestions?.map((q: Question) => {
+          const answer = surveyResponse ? surveyResponse[q.title] : null;
+
+          return (
+            <div
+              key={q.id}
+              className="bg-white border rounded-2xl shadow-sm p-4 
+                         hover:shadow-md transition-all 
+                         min-w-[250px] max-w-fit h-[157px]"
+            >
+              <p className="font-semibold text-[#1a3353] flex items-start">
+                <span className="text-blue-700 mr-2">•</span>
+                {q.question}
               </p>
-              <p className="text-gray-700">
-                Answer:{" "}
+              <p className="text-gray-700 mt-2 ml-5">
                 {answer !== null && answer !== undefined ? answer : "No answer"}
               </p>
             </div>
-          </div>
-        );
-      })}
+          );
+        })}
+      </div>
     </div>
   );
 };
