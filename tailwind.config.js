@@ -1,4 +1,4 @@
-/** @type {import('tailwindcss').Config} */
+	/** @type {import('tailwindcss').Config} */
 export default {
   darkMode: ["class"],
   content: ["./src/**/*.{html,js,ts,tsx}"],
@@ -11,6 +11,23 @@ export default {
   		}
   	},
   	extend: {
+  		fontFamily: {
+  			sans: [
+  				'"Noto Sans"',
+  				'ui-sans-serif',
+  				'system-ui',
+  				'-apple-system',
+  				'Segoe UI',
+  				'Roboto',
+  				'Helvetica Neue',
+  				'Arial',
+  				'"Noto Sans"',
+  				'sans-serif',
+  				'"Apple Color Emoji"',
+  				'"Segoe UI Emoji"',
+  				'"Segoe UI Symbol"'
+  			]
+  		},
   		colors: {
   			border: 'hsl(var(--border))',
   			input: 'hsl(var(--input))',

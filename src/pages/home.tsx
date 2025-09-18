@@ -1,9 +1,8 @@
 import { useEffect } from "react";
-import D3BarChart from "../components/charts/D3BarChart";
 // import RechartsBarChart from "../components/charts/RechartsBarChart";
 import LimeSurvey from "./LimeSurvey/LimeSurvey";
 import { useLocation } from "react-router-dom";
-import oecd from "../assets/oecd.jpg";
+import Header from "../components/Header";
 import TalisData from "./TalisData/TalisData";
 
 const Home = () => {
@@ -31,35 +30,23 @@ const Home = () => {
     }
   }, [sid]);
 
-
   return (
-    <div className="min-h-screen w-full bg-gray-100 dark:bg-gray-900">
+    <div className="min-h-screen w-full bg-background">
       {/* Header */}
-      <header className="w-full bg-white shadow-md">
-        <div className="container mx-auto px-4 max-w-6xl">
-          <img
-            src={oecd}
-            alt="OECD"
-            style={{ height: "100px", width: "200px", objectFit: "contain" }}
-          />
-        </div>
-      </header>
+      <Header />
 
       <div>
-          <TalisData />
-        </div>
+        <TalisData />
+      </div>
 
       <div className="container mx-auto px-4 py-8 max-w-6xl dark:text-white">
         {/* Charts Section */}
         <div className="grid grid-cols-1 gap-8 mb-8">
-          {/* <D3BarChart data={chartData} referenceAge={29} /> */}
           {/* <RechartsBarChart data={chartData} referenceAge={29} /> */}
         </div>
 
-       
-
         {/* LimeSurvey Section */}
-        <div>
+        <div className="text-left">
           <LimeSurvey />
         </div>
       </div>

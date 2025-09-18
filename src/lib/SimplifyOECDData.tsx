@@ -41,7 +41,9 @@ export interface ChartData {
   datasets: ChartDataset[];
 }
 
-export const parseOECDClassSizeData = (sdmxResponse: any): ParsedDataPoint[] => {
+export const parseOECDClassSizeData = (
+  sdmxResponse: any,
+): ParsedDataPoint[] => {
   if (
     !sdmxResponse.data ||
     !sdmxResponse.data.dataSets ||
@@ -61,16 +63,14 @@ export const parseOECDClassSizeData = (sdmxResponse: any): ParsedDataPoint[] => 
   const dimensionIndices = {
     refArea: dimensions.findIndex((d: any) => d.id === "REF_AREA"),
     educationLevel: dimensions.findIndex((d: any) => d.id === "EDUCATION_LEV"),
-    institutionType: dimensions.findIndex(
-      (d: any) => d.id === "INST_TYPE_EDU"
-    ),
+    institutionType: dimensions.findIndex((d: any) => d.id === "INST_TYPE_EDU"),
     timePeriod: dimensions.findIndex((d: any) => d.id === "TIME_PERIOD"),
   };
 
   // Helper function to get dimension value by index
   function getDimensionValue(
     dimensionIndex: number,
-    valueIndex: number
+    valueIndex: number,
   ): DimensionValue {
     if (
       dimensionIndex === -1 ||
@@ -97,26 +97,26 @@ export const parseOECDClassSizeData = (sdmxResponse: any): ParsedDataPoint[] => 
 
   // Parse each observation
   for (const [key, observation] of Object.entries<number[]>(
-    dataset.observations
+    dataset.observations,
   )) {
     const dimensionKeys = key.split(":").map((k) => parseInt(k, 10));
 
     // Get dimension values using the indices
     const country = getDimensionValue(
       dimensionIndices.refArea,
-      dimensionKeys[dimensionIndices.refArea]
+      dimensionKeys[dimensionIndices.refArea],
     );
     const educationLevel = getDimensionValue(
       dimensionIndices.educationLevel,
-      dimensionKeys[dimensionIndices.educationLevel]
+      dimensionKeys[dimensionIndices.educationLevel],
     );
     const institutionType = getDimensionValue(
       dimensionIndices.institutionType,
-      dimensionKeys[dimensionIndices.institutionType]
+      dimensionKeys[dimensionIndices.institutionType],
     );
     const timePeriod = getDimensionValue(
       dimensionIndices.timePeriod,
-      dimensionKeys[dimensionIndices.timePeriod]
+      dimensionKeys[dimensionIndices.timePeriod],
     );
 
     // Create data point
@@ -139,12 +139,19 @@ export const parseOECDClassSizeData = (sdmxResponse: any): ParsedDataPoint[] => 
     }
   }
 
+  // Sort by value descending (high to low)
+  parsedData.sort((a, b) => {
+    const va = a.value ?? -Infinity;
+    const vb = b.value ?? -Infinity;
+    return vb - va;
+  });
+
   return parsedData;
 };
 
 export const prepareBarChartData = (
   parsedData: ParsedDataPoint[],
-  educationLevel: string = "Primary education"
+  educationLevel: string = "Primary education",
 ): ChartData => {
   // Filter by education level if specified
   const filteredData = educationLevel
@@ -152,8 +159,10 @@ export const prepareBarChartData = (
     : parsedData;
 
   // Group by country and institution type
-  const countryData: Record<string | number, Record<string | number, number>> =
-    {};
+  const countryData: Record<
+    string | number,
+    Record<string | number, number>
+  > = {};
 
   filteredData.forEach((item) => {
     if (!countryData[item.country]) {
@@ -185,7 +194,7 @@ export const prepareBarChartData = (
     return {
       label: type,
       data: Object.keys(countryData).map(
-        (country) => countryData[country][type] || 0
+        (country) => countryData[country][type] || 0,
       ),
       backgroundColor: getColor(index),
     };
@@ -199,7 +208,7 @@ export const prepareBarChartData = (
 
 export const groupDataForChart = (
   parsedData: ParsedDataPoint[],
-  groupBy: keyof ParsedDataPoint = "country"
+  groupBy: keyof ParsedDataPoint = "country",
 ): Record<string, ParsedDataPoint[]> => {
   const groupedData: Record<string, ParsedDataPoint[]> = {};
 
@@ -220,7 +229,7 @@ export const groupDataForChart = (
 // Helper function to get unique values for filtering
 export const getUniqueValues = (
   parsedData: ParsedDataPoint[],
-  field: keyof ParsedDataPoint
+  field: keyof ParsedDataPoint,
 ): (string | number)[] => {
   return [...new Set(parsedData.map((item) => item[field]))]
     .filter((item): item is string | number => item != null)
@@ -229,7 +238,9 @@ export const getUniqueValues = (
 
 // Helper function to get summary statistics
 export const getDataSummary = (parsedData: ParsedDataPoint[]): DataSummary => {
-  const values = parsedData.map((item) => item.value).filter((v) => v !== null) as number[];
+  const values = parsedData
+    .map((item) => item.value)
+    .filter((v) => v !== null) as number[];
 
   const summary: DataSummary = {
     totalRecords: parsedData.length,
